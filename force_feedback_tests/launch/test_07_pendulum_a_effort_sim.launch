@@ -1,0 +1,43 @@
+<launch>
+  <!-- Remapping to avoid https://github.com/ros-visualization/rqt_plot/issues/7 -->
+  <remap from="hebiros/hebi_gripper/feedback/joint_state" to="hebiros/hebi_gripper/feedback_/joint_state" />
+
+  <!-- Load URDF onto Parameter server, start Gazebo, spawn URDF in Gazebo -->
+  <include file="$(find force_feedback_tests)/launch/spawn_urdf_in_gazebo.launch">
+    <arg name="urdf_path_bool" value="true"/>
+    <arg name="urdf_path" value="$(find force_feedback_tests)/urdf/pendulum_a.urdf"/>
+  </include>
+
+  <!-- Start hebiros_node -->
+  <include file="$(find hebiros)/launch/hebiros_gazebo.launch" />
+
+  <node name="effort_controller" pkg="force_feedback_tests" type="effort_ctrl.py"
+        output="screen" launch-prefix="xterm -e"
+        args="-hebi_group hebi_gripper -module GRIPPER/Spool" />
+
+  <!-- Spawn gazebo_transport_to_ros_topic nodes -->
+  <node name="gazebo_transport_to_ros_topic" pkg="hebihexapod_gazebo" type="gazebo_transport_to_ros_topic"
+        output="screen" launch-prefix="xterm -e" >
+    <param name="gazebo_transport_topic_to_sub" type="str" value="/gazebo/default/robot/GRIPPER/Spool/X5_9/gripper_force_torque/wrench" />
+    <param name="ros_topic_to_pub" type="str" value="gripper_force_torque" />
+    <param name="ros_rate" type="double" value="2000.0" />
+  </node>
+
+  <!-- Spawn gazebo_transport_to_ros_topic nodes -->
+  <node name="gazebo_transport_to_ros_topic_2" pkg="hebihexapod_gazebo" type="gazebo_transport_to_ros_topic"
+        output="screen" launch-prefix="xterm -e" >
+    <param name="gazebo_transport_topic_to_sub" type="str" value="/gazebo/default/robot/GRIPPER/Spool/X5_9/gripper_force_torque_parent/wrench" />
+    <param name="ros_topic_to_pub" type="str" value="gripper_force_torque_parent" />
+    <param name="ros_rate" type="double" value="2000.0" />
+  </node>
+
+  <!-- Spawn gazebo_transport_to_ros_topic nodes -->
+  <node name="gazebo_transport_to_ros_topic_3" pkg="hebihexapod_gazebo" type="gazebo_transport_to_ros_topic"
+        output="screen" launch-prefix="xterm -e" >
+    <param name="gazebo_transport_topic_to_sub" type="str" value="/gazebo/default/robot/GRIPPER/Spool/X5_9/gripper_force_torque_child/wrench" />
+    <param name="ros_topic_to_pub" type="str" value="gripper_force_torque_child" />
+    <param name="ros_rate" type="double" value="2000.0" />
+  </node>
+  <!-- launch-prefix="xterm -e" -->
+
+</launch>

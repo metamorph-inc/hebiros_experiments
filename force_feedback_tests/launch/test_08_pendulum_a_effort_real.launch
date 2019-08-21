@@ -1,0 +1,17 @@
+<launch>
+  <!-- Remapping to avoid https://github.com/ros-visualization/rqt_plot/issues/7 -->
+  <remap from="hebiros/hebi_gripper/feedback/joint_state" to="hebiros/hebi_gripper/feedback_/joint_state" />
+
+  <!-- Load URDF onto Parameter server -->
+  <include file="$(find force_feedback_tests)/launch/load_urdf_onto_ros_param_server.launch" />
+
+  <!-- Start hebiros_node -->
+  <include file="$(find hebiros)/launch/hebiros.launch" />
+
+  <node name="effort_controller" pkg="force_feedback_tests" type="effort_ctrl.py"
+        output="screen" launch-prefix="xterm -e"
+        args="-hebi_group hebi_gripper -module GRIPPER/Spool" />
+
+  <!-- launch-prefix="xterm -e" -->
+
+</launch>

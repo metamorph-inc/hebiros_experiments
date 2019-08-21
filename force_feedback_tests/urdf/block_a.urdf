@@ -1,0 +1,119 @@
+<?xml version="1.0" ?>
+<robot name="block_a">
+  <link name="world"/>
+  <link name="base_link"/>
+
+  <joint name="world_to_base_link" type="fixed">
+    <parent link="world"/>
+    <child link="base_link"/>
+  </joint>
+  <joint name="base_link_to_hebi_x9_spool" type="fixed">
+    <parent link="base_link"/>
+    <child link="hebi_x9_spool"/>
+    <origin rpy="0.0 0.0 0.0" xyz="0 0 0"/>
+  </joint>
+
+  <joint name="GRIPPER/Spool/X5_9" type="revolute">
+    <parent link="hebi_x9_spool"/>
+    <child link="a_2038_02_11Z"/>
+    <axis xyz="0 0 1.0"/>
+    <dynamics damping="0.5" friction="0.06"/>
+    <limit effort="20" lower="-1.75" upper="+1.75" velocity="90"/>
+    <origin rpy="0 0 0" xyz="0 0 0.03"/>
+  </joint>
+  <gazebo reference="GRIPPER/Spool/X5_9">
+    <implicitSpringDamper>True</implicitSpringDamper>
+  </gazebo>
+  <!-- Gazebo force-torque sensor -->
+  <gazebo reference="GRIPPER/Spool/X5_9">
+    <sensor name="gripper_force_torque" type="force_torque">
+      <always_on>true</always_on>
+      <update_rate>2000.0</update_rate>
+      <visualize>true</visualize>
+      <force_torque>
+        <frame>sensor</frame>
+        <measure_direction>child_to_parent</measure_direction>
+      </force_torque>
+    </sensor>
+  </gazebo>
+
+  <link name="hebi_x9_spool">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.015"/>
+      <geometry>
+        <mesh filename="package://hebi_6_dof_arm_generated_urdf/meshes/hebi_x5_9_15z_prt.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.015"/>
+      <geometry>
+        <mesh filename="package://force_feedback_tests/meshes/hebi_x5_9_15z_prt.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin rpy="0 0 0" xyz="-0.0142019322139 -0.00151173442654 0.0150064707722"/>
+      <mass value="0.3601223934133934"/>
+      <inertia ixx="0.000149654657264" ixy="-2.029262623e-05" ixz="1.36324075072e-08" iyy="0.000259599603648" iyz="1.37817063293e-07" izz="0.000355190384437"/>
+    </inertial>
+  </link>
+  <gazebo reference="hebi_x9_spool">
+    <selfCollide>True</selfCollide>
+    <material>Gazebo/Red</material>
+    <mu1>0.1</mu1>
+    <mu2>0.1</mu2>
+    <kp>10000000</kp>
+    <kd>1</kd>
+    <minDepth>0.001</minDepth>
+    <maxVel>100</maxVel>
+    <sensor name="GRIPPER/Spool/imu_sensor" type="imu">
+      <always_on>true</always_on>
+      <update_rate>100</update_rate>
+      <visualize>true</visualize>
+      <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+        <topicName>/hebiros_gazebo_plugin/imu/GRIPPER/Spool</topicName>
+        <bodyName>GRIPPER/Spool/imu_link</bodyName>
+        <updateRateHZ>10.0</updateRateHZ>
+        <gaussianNoise>0.0</gaussianNoise>
+        <xyzOffset>0.025 0 0.003</xyzOffset>
+        <rpyOffset>0 0 0</rpyOffset>
+        <frameName>GRIPPER/Spool/imu_link</frameName>
+      </plugin>
+      <pose>0 0 0 0 0 0</pose>
+    </sensor>
+  </gazebo>
+
+  <link name="a_2038_02_11Z">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://hebi_6_dof_arm_generated_urdf/meshes/a_2038_02_11z_prt.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://hebi_6_dof_arm_generated_urdf/meshes/a_2038_02_11z_prt.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="0.059108249978877175"/>
+      <inertia ixx="2.3632587043e-05" ixy="0.0" ixz="-3.93131579939e-06" iyy="2.03298829586e-05" iyz="0.0" izz="2.72912531732e-05"/>
+    </inertial>
+  </link>
+  <gazebo reference="a_2038_02_11Z">
+    <selfCollide>False</selfCollide>
+    <material>Gazebo/Grey</material>
+    <mu1>0.1</mu1>
+    <mu2>0.1</mu2>
+    <kp>10000000</kp>
+    <kd>1</kd>
+    <minDepth>0.0005</minDepth>
+    <maxVel>100</maxVel>
+  </gazebo>
+
+  <!--HEBI-ROS Gazebo Plugin-->
+  <gazebo>
+    <plugin filename="libhebiros_gazebo_plugin.so" name="hebiros_gazebo_plugin"/>
+  </gazebo>
+</robot>

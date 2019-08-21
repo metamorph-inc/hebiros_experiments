@@ -1,0 +1,6 @@
+<launch>
+  <arg name="urdf_path" default="$(find force_feedback_tests)/urdf/block_a.urdf"/>
+
+  <!-- Load the URDF model only the parameter server -->
+  <param name="robot_description" textfile="$(arg urdf_path)"/>
+</launch>
