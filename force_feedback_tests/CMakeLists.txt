@@ -8,15 +8,6 @@ project(force_feedback_tests)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  actionlib
-  gazebo_ros
-  geometry_msgs
-  rospy
-  sensor_msgs
-  hebiros
-  hebiros_utils
-  hebiros_gazebo_plugin
-  hebihexapod_gazebo
 )
 
 catkin_package(
